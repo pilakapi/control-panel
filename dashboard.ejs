@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>IPTV Admin</title>
+</head>
+<body>
+
+<h1>Panel IPTV Profesional</h1>
+
+<h2>Crear Usuario</h2>
+<form method="POST" action="/create-user">
+<input name="username" placeholder="Usuario" required>
+<input name="password" placeholder="Password" required>
+<input name="max_connections" type="number" placeholder="Max conexiones">
+<input name="expiration_date" type="datetime-local">
+<button>Crear</button>
+</form>
+
+<h2>Usuarios</h2>
+<% users.forEach(u => { %>
+<div style="border:1px solid #ccc; padding:10px; margin:10px;">
+<b><%= u.username %></b><br>
+Estado: <%= u.active ? "Activo" : "Inactivo" %><br>
+Expira: <%= u.expiration_date || "No expira" %><br>
+
+<form method="POST" action="/toggle/<%= u.id %>">
+<button>Activar / Desactivar</button>
+</form>
+
+<form method="POST" action="/reactivate/<%= u.id %>">
+<input type="datetime-local" name="expiration_date">
+<button>Reactivar / Cambiar Expiración</button>
+</form>
+
+<form method="POST" action="/add-playlist/<%= u.id %>">
+<input name="source_url" placeholder="Pegar URL M3U">
+<button>Guardar Playlist</button>
+</form>
+
+<p>URL Cliente:</p>
+<code>/m3u/<%= u.username %></code>
+</div>
+<% }) %>
+
+</body>
+</html>
